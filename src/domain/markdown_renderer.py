@@ -1,3 +1,11 @@
+"""src.domain.markdown_renderer
+
+`DocNode` から Markdown 文字列を生成するレンダラを提供します。
+
+このモジュールは IR（`DocNode`）を Markdown に変換する責務のみを持ち、整形やファイル入出力は
+別責務として扱います。
+"""
+
 from src.domain.doc_ir import (
     Heading,
     Paragraph,
@@ -11,8 +19,17 @@ from src.domain.doc_ir import (
 
 
 def render_node(node: DocNode) -> str:
+    """
+    単一ノードを Markdown 文字列に変換して返します。
+
+    Args:
+        node: 変換対象の `DocNode`。
+
+    Returns:
+        str: ノードを表す Markdown 文字列（末尾に改行を含む）。
+    """
     if isinstance(node, Heading):
-        return f"{'#' * node.level} {node.text}\n"
+        return f"{('#' * node.level)} {node.text}\n"
 
     if isinstance(node, Paragraph):
         return f"{node.text}\n"
@@ -38,6 +55,12 @@ def render_node(node: DocNode) -> str:
 def document_to_markdown(
     doc: Document,
 ) -> str:
+    """
+    `Document` を Markdown 文字列に変換して返します。
+
+    前方のフロントマターは HTML コメント形式で出力されます。
+    メソッドは文字列変換のみを行い、ファイルの読み書きや整形は呼び出し側で行います。
+    """
     out = []
 
     # front matter as comments
