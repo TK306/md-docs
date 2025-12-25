@@ -9,10 +9,43 @@ from src.domain.doc_ir import (
     DocNode,
 )
 import re
+from typing import cast
 
 
 class MarkdownParseError(Exception):
     pass
+
+
+class DocParser:
+    def __init__(self, nodes: list[DocNode]):
+        self.nodes = nodes
+
+    def find_heading(self, level: int) -> list[Heading]:
+        return [n for n in self.nodes if isinstance(n, Heading) and n.level == level]
+
+    def first_heading(self, level: int) -> Heading | None:
+        for n in self.nodes:
+            if isinstance(n, Heading) and n.level == level:
+                return n
+        return None
+
+    def table_as_dict(self) -> dict[str, str]:
+        for n in self.nodes:
+            if isinstance(n, Table):
+                return {row[0]: row[1] for row in cast(Table, n).rows if len(row) >= 2}
+        return {}
+
+    def bullet_list_after(self, heading_text: str, level: int) -> list[str]:
+        for i, n in enumerate(self.nodes):
+            if (
+                isinstance(n, Heading)
+                and n.level == level
+                and n.text == heading_text
+                and i + 1 < len(self.nodes)
+                and isinstance(self.nodes[i + 1], BulletList)
+            ):
+                return cast(BulletList, self.nodes[i + 1]).items
+        return []
 
 
 def parse_markdown(markdown_text: str) -> Document:
@@ -21,19 +54,22 @@ def parse_markdown(markdown_text: str) -> Document:
     Raises MarkdownParseError if parsing fails.
     """
     lines = markdown_text.splitlines()
-    front_matter = {}
+    front_matter: dict[str, str] = {}
     nodes: list[DocNode] = []
     i = 0
 
-    # Parse front matter
-    if lines and lines[0] == "---":
-        i = 1
-        while i < len(lines) and lines[i] != "---":
-            if ":" in lines[i]:
-                key, value = lines[i].split(":", 1)
+    # Parse front matter from comments
+    front_matter = {}
+    if i < len(lines) and lines[i].startswith("<!--"):
+        i += 1
+        while i < len(lines) and not lines[i].startswith("-->"):
+            line = lines[i]
+            if ":" in line:
+                key, value = line.split(":", 1)
                 front_matter[key.strip()] = value.strip()
             i += 1
-        i += 1  # Skip the closing ---
+        if i < len(lines):
+            i += 1  # Skip -->
 
     # Skip empty lines after front matter
     while i < len(lines) and not lines[i].strip():

@@ -1,7 +1,5 @@
-from src.domain.markdown_renderer import document_to_markdown
-from src.domain.markdown_parser import parse_markdown
-from src.domain.doc_ir import Document
 from src.usecase.eval_item import EvalItem
+from pathlib import Path
 
 item = EvalItem(
     id="E001",
@@ -13,15 +11,9 @@ item = EvalItem(
     expected=["期待結果1", "期待結果2"],
 )
 
-doc = Document(front_matter={"title": "評価レポート"}, nodes=item.to_nodes())
 
-with open("output.md", "w", encoding="utf-8") as f:
-    f.write(document_to_markdown(doc))
+item.dump_markdown({"title": "評価レポート", "date": "2024-06-15"}, Path("output.md"))
 
-
-with open("input.md", "r", encoding="utf-8") as f:
-    markdown_content = f.read()
-parsed_doc = parse_markdown(markdown_content)
-item = EvalItem.from_nodes(parsed_doc.nodes)
+front_matter, item = EvalItem.load_markdown(Path("input.md"))
 
 print(item)

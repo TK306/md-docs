@@ -1,10 +1,11 @@
 from src.domain.doc_ir import DocNode, Heading, Table, BulletList
+from src.domain.doc_convertible import DocConvertible
+from src.domain.markdown_parser import DocParser
 from dataclasses import dataclass
-from typing import cast
 
 
 @dataclass
-class EvalItem:
+class EvalItem(DocConvertible):
     id: str
     title: str
     eval_type: str
@@ -30,54 +31,34 @@ class EvalItem:
             BulletList(self.expected),
         ]
 
-    @staticmethod
-    def from_nodes(nodes: list[DocNode]) -> "EvalItem":
-        id = ""
-        title = ""
-        eval_type = ""
-        priority = ""
-        result = ""
-        conditions: list[str] = []
-        expected: list[str] = []
+    @classmethod
+    def from_nodes(cls, nodes: list[DocNode]) -> "EvalItem":
+        parser = DocParser(nodes)
 
-        i = 0
-        while i < len(nodes):
-            node = nodes[i]
-            if isinstance(node, Heading) and node.level == 3:
-                parts = node.text.split(" ", 1)
-                id = parts[0]
-                title = parts[1] if len(parts) > 1 else ""
-            elif isinstance(node, Table):
-                for row in node.rows:
-                    if row[0] == "種別":
-                        eval_type = row[1]
-                    elif row[0] == "優先度":
-                        priority = row[1]
-                    elif row[0] == "判定":
-                        result = row[1]
-            elif isinstance(node, Heading) and node.level == 4:
-                if (
-                    node.text == "条件"
-                    and i + 1 < len(nodes)
-                    and isinstance(nodes[i + 1], BulletList)
-                ):
-                    conditions = cast(BulletList, nodes[i + 1]).items
-                    i += 1
-                elif (
-                    node.text == "期待結果"
-                    and i + 1 < len(nodes)
-                    and isinstance(nodes[i + 1], BulletList)
-                ):
-                    expected = cast(BulletList, nodes[i + 1]).items
-                    i += 1
-            i += 1
+        h = parser.first_heading(level=3)
+        if h is None:
+            raise ValueError("レベル3見出しがありません")
 
-        return EvalItem(
+        parts = h.text.split(" ", 1)
+        id = parts[0]
+        title = parts[1] if len(parts) > 1 else ""
+
+        table = parser.table_as_dict()
+
+        conditions = parser.bullet_list_after("条件", level=4)
+        expected = parser.bullet_list_after("期待結果", level=4)
+
+        if not all(
+            [id, title, table.get("種別"), table.get("優先度"), table.get("判定")]
+        ):
+            raise ValueError("EvalItemの必須情報が不足しています")
+
+        return cls(
             id=id,
             title=title,
-            eval_type=eval_type,
-            priority=priority,
-            result=result,
+            eval_type=table["種別"],
+            priority=table["優先度"],
+            result=table["判定"],
             conditions=conditions,
             expected=expected,
         )

@@ -7,4 +7,5 @@ requires-python = ">=3.11"
 dependencies = [
     "mypy>=1.19.1",
     "ruff>=0.14.10",
+    "mdformat>=0.7.17",
 ]
