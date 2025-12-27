@@ -35,6 +35,19 @@ class DocConvertible(ABC):
         """
         pass
 
+    def to_front_matter(self) -> dict:
+        """
+        モデルが提供するフロントマターを返すフック。
+
+        デフォルト実装は空の辞書を返す。具象クラスは必要に応じて
+        オーバーライドして `dict[str,str]` を返すこと。
+
+        例: ドメインモデルがメタ情報（title 等）を持つ場合、ここで
+        その情報を返すことで `ConvertFileUsecase.save_model_to_path` が
+        それをファイルに書き出せる。
+        """
+        return {}
+
     @classmethod
     def from_nodes(
         cls: Type[T], nodes: list[DocNode], front_matter: Optional[dict] = None

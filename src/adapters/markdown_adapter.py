@@ -10,7 +10,6 @@ from __future__ import annotations
 from src.interfaces.protocols import DocumentParser, DocumentRenderer
 from src.adapters.markdown_renderer import document_to_markdown
 from src.adapters.markdown_parser import MarkdownParserImpl
-import mdformat
 
 
 class MarkdownParserAdapter:
@@ -31,6 +30,6 @@ class MarkdownRendererAdapter(DocumentRenderer):
     """`document_to_markdown` をラップし、出力時に `mdformat` で整形するアダプタ。"""
 
     def render(self, doc):
-        raw = document_to_markdown(doc)
-        # レンダリング結果を整形して返す
-        return mdformat.text(raw)
+        # `document_to_markdown` from the renderer already returns formatted
+        # Markdown (adapter-level). Avoid double-formatting here.
+        return document_to_markdown(doc)

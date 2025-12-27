@@ -1,3 +1,8 @@
+"""tests/spec_tests/test_spec_frontmatter_nodes_table.py
+Covered SPECs: SPEC-FM-001, SPEC-NODES-001, SPEC-TABLE-001
+See: docs/02_外部設計仕様書.md
+"""
+
 from src.adapters.markdown_parser import parse_markdown
 from src.domain.doc_ir import Table
 

@@ -1,3 +1,8 @@
+"""tests/spec_tests/test_spec_parser_renderer_storage_usecase.py
+Covered SPECs: SPEC-PARSER-001, SPEC-RENDER-001, SPEC-STORAGE-001
+See: docs/02_外部設計仕様書.md
+"""
+
 from pathlib import Path
 
 from src.adapters.markdown_adapter import MarkdownParserAdapter, MarkdownRendererAdapter
