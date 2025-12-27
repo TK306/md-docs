@@ -8,17 +8,23 @@
 from __future__ import annotations
 
 from src.interfaces.protocols import DocumentParser, DocumentRenderer
-from src.adapters.markdown_parser import parse_markdown
 from src.adapters.markdown_renderer import document_to_markdown
+from src.adapters.markdown_parser import MarkdownParserImpl
 import mdformat
 
 
-class MarkdownParserAdapter(DocumentParser):
-    """既存の `parse_markdown` を DocumentParser プロトコルに適合させるアダプタ。"""
+class MarkdownParserAdapter:
+    """Adapter that delegates to a `DocumentParser` implementation.
+
+    Default parser is `MarkdownParserImpl`, but a different implementation
+    (e.g. a mock) can be injected for testing or alternate behavior.
+    """
+
+    def __init__(self, parser: DocumentParser | None = None):
+        self._parser = parser or MarkdownParserImpl()
 
     def parse(self, text: str):
-        # パース前に整形は行わず、parse_markdown に渡す
-        return parse_markdown(text)
+        return self._parser.parse(text)
 
 
 class MarkdownRendererAdapter(DocumentRenderer):

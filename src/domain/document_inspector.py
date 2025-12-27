@@ -15,11 +15,7 @@ from src.domain.doc_ir import (
 from typing import cast
 
 
-class MarkdownParseError(Exception):
-    """Markdown の構文が期待どおりでない場合に投げられる例外。"""
-
-
-class DocParser:
+class DocumentInspector:
     """`Document.nodes` を操作するためのユーティリティクラス。
 
     目的は、パース済みノード列から見出しや表、箇条書きなどを簡単に検索・取得することです。

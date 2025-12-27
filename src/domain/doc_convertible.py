@@ -8,7 +8,7 @@
 """
 
 from abc import ABC, abstractmethod
-from typing import TypeVar, Type
+from typing import TypeVar, Type, Optional, Callable, cast
 
 from src.domain.doc_ir import DocNode
 
@@ -36,17 +36,31 @@ class DocConvertible(ABC):
         pass
 
     @classmethod
-    @abstractmethod
-    def from_nodes(cls: Type[T], nodes: list[DocNode]) -> T:
+    def from_nodes(
+        cls: Type[T], nodes: list[DocNode], front_matter: Optional[dict] = None
+    ) -> T:
         """
-        ノード列からオブジェクトを復元するファクトリメソッド。
+        ノード列からオブジェクトを復元するファクトリメソッドの既定実装。
 
-        Args:
-            nodes: パース済みのドキュメントノード列。
+        具象クラスは次のいずれかを実装できます:
+        - `from_nodes(cls, nodes, front_matter=None)` を直接実装する（従来方式）
+        - `from_cursor(cls, cur)` を実装して `NodeCursor` を使った実装にする（推奨）
 
-        Returns:
-            T: サブクラスのインスタンス。
+        具象が `from_cursor` を持つ場合は `NodeCursor` を作成して `from_cursor` を呼び出します。
+        どちらも実装されていない場合は `NotImplementedError` を送出します。
         """
-        pass
+        # 後方互換: 具象が from_cursor を実装していればそれを用いる
+        if hasattr(cls, "from_cursor"):
+            from src.domain.doc_cursor import NodeCursor
+
+            cur = NodeCursor(nodes, front_matter or {})
+            # 型情報が静的にはないため getattr してキャストしてから呼ぶ
+            method = cast(Callable[[NodeCursor], T], getattr(cls, "from_cursor"))
+            return method(cur)
+
+        # 既存の具象が from_nodes をオーバーライドしている場合はそちらが使われる
+        raise NotImplementedError(
+            f"{cls.__name__}.from_nodes is not implemented. Implement either 'from_nodes' or 'from_cursor'."
+        )
 
     # I/O はユースケース / アダプタで扱うため、ここにファイル操作メソッドは置きません。
