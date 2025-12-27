@@ -1,3 +1,4 @@
+
 [project]
 name = "md-docs"
 version = "0.1.0"
@@ -11,3 +12,44 @@ dependencies = [
     "pytest>=9.0.2",
     "pre-commit>=4.5.1",
 ]
+
+[project.optional-dependencies]
+dev = [
+    "import-linter>=2.9",
+]
+
+[tool.importlinter]
+# Projects root packages for import-linter
+root_packages = ["src"]
+
+# Contracts enforcing Clean Architecture layer boundaries
+
+[[tool.importlinter.contracts]]
+name = "domain_no_adapters"
+type = "forbidden"
+source_modules = ["src.domain"]
+forbidden_modules = ["src.adapters"]
+
+[[tool.importlinter.contracts]]
+name = "domain_no_usecase"
+type = "forbidden"
+source_modules = ["src.domain"]
+forbidden_modules = ["src.usecase"]
+
+[[tool.importlinter.contracts]]
+name = "domain_no_interfaces"
+type = "forbidden"
+source_modules = ["src.domain"]
+forbidden_modules = ["src.interfaces"]
+
+[[tool.importlinter.contracts]]
+name = "usecase_no_adapters"
+type = "forbidden"
+source_modules = ["src.usecase"]
+forbidden_modules = ["src.adapters"]
+
+[[tool.importlinter.contracts]]
+name = "interfaces_no_adapters"
+type = "forbidden"
+source_modules = ["src.interfaces"]
+forbidden_modules = ["src.adapters"]

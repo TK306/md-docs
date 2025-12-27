@@ -1,7 +1,9 @@
 # Copilot / AI Agent Instructions for md-docs
 
 This repository has a deliberately small and layered architecture.
-Follow these rules strictly — many tests assume these boundaries.
+Follow these rules strictly — many tests and lint rules assume these boundaries.
+
+If you are unsure at any point, STOP and ask instead of guessing.
 
 ---
 
@@ -31,13 +33,16 @@ If you are unsure which layer a change belongs to, STOP and re-evaluate.
 ### Dependency Injection
 - Usecases must depend on Protocols, not concrete implementations.
 - Wiring happens explicitly (see sample_main.py).
+- Never import adapter implementations directly into usecases.
 
 ### Domain purity
 - Domain code MUST NOT import:
   - mdformat
   - pathlib
   - file I/O
-- Domain functions return raw data (e.g. unformatted Markdown strings).
+  - any adapter, usecase, or interface module
+- Domain functions return raw data only
+  (e.g. unformatted Markdown strings, pure data structures).
 
 ### Formatting responsibility
 - Domain serializers produce raw Markdown.
@@ -69,6 +74,7 @@ Never:
 - Add parsing logic to domain
 - Add formatting logic to domain
 - Skip serializer updates when adding a new node
+- Patch behavior only in adapters to “make tests pass”
 
 IR changes without spec_tests updates are considered incomplete.
 
@@ -84,6 +90,7 @@ IR changes without spec_tests updates are considered incomplete.
   - Update expected exceptions in tests
 
 This is not a full Markdown parser.
+Do not attempt to make it one.
 
 ---
 
@@ -94,7 +101,11 @@ This is not a full Markdown parser.
     - Row column count != 2
     - Duplicate keys exist
 - Do not weaken this behavior silently.
-- If changing it, add a new flag or explicit alternative API.
+- If changing it:
+  - Add a new flag, OR
+  - Introduce an explicit alternative API
+
+Never change the default behavior without tests.
 
 ---
 
@@ -104,7 +115,7 @@ Python:
 - >= 3.11
 
 Tests:
-- pytest from project root only
+- pytest must be run from the project root
 - tests/spec_tests/ define behavioral contracts
 - Adapter tests verify integration, not formatting style
 
@@ -120,6 +131,7 @@ Commands:
 - Do NOT bypass Protocols in usecases
 - Do NOT extend parser leniency without tests
 - Do NOT add logic to domain for convenience
+- Do NOT move files across layers to “fix” imports
 
 ---
 
@@ -134,3 +146,37 @@ Commands:
 If a change touches more than one of these, review all affected layers.
 
 ---
+
+## 9. Architecture enforcement (import-linter)
+
+This repository enforces layer dependency rules using import-linter.
+Violating these rules will FAIL CI.
+
+### Enforced dependency rules
+
+- src/domain MUST NOT import:
+  - src.adapters
+  - src.usecase
+  - src.interfaces
+  - any external libraries
+
+- src.usecase MUST NOT import:
+  - src.adapters
+
+- src.interfaces MUST NOT import:
+  - src.adapters
+
+These rules are checked by `lint-imports`.
+
+Do NOT attempt to fix violations by:
+- Moving files between layers
+- Relaxing architecture constraints
+- Introducing shortcuts or “temporary” imports
+
+If functionality from another layer is needed:
+- Define or extend a Protocol in src/interfaces
+- Inject the implementation via a usecase
+
+---
+
+End of instructions.
