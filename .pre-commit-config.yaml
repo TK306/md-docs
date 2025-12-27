@@ -1,44 +1,37 @@
-# pre-commit configuration added by developer
-# This file defines local hooks that run project linters/typecheck/tests
-# Commands executed exactly as requested by the user.
-
 repos:
   - repo: local
     hooks:
       - id: ruff-format
         name: uv run ruff format
-        entry: uv
-        args: ["run", "ruff", "format", "."]
+        entry: env
+        args: ["PYTHONPATH=src", "uv", "run", "ruff", "format", "."]
         language: system
         pass_filenames: false
 
       - id: ruff-check-fix
         name: uv run ruff check --fix
-        entry: uv
-        args: ["run", "ruff", "check", "--fix", "."]
+        entry: env
+        args: ["PYTHONPATH=src", "uv", "run", "ruff", "check", "--fix", "."]
         language: system
         pass_filenames: false
 
       - id: lint-imports
         name: uv run lint-imports (import-linter)
-        entry: uv
-        args: ["run", "lint-imports", "--config", "pyproject.toml"]
+        entry: env
+        args: ["PYTHONPATH=src", "uv", "run", "lint-imports", "--config", "pyproject.toml"]
         language: system
         pass_filenames: false
-        # Ensure the project root is on PYTHONPATH so import-linter can analyze `src`.
-        env:
-          PYTHONPATH: "."
 
       - id: mypy
-        name: uv run mypy .
-        entry: uv
-        args: ["run", "mypy", "."]
+        name: uv run mypy
+        entry: env
+        args: ["PYTHONPATH=src", "uv", "run", "mypy", "src"]
         language: system
         pass_filenames: false
 
       - id: pytest
         name: uv run pytest -q
-        entry: uv
-        args: ["run", "pytest", "-q"]
+        entry: env
+        args: ["PYTHONPATH=src", "uv", "run", "pytest", "-q"]
         language: system
         pass_filenames: false

@@ -3,7 +3,7 @@ Covered SPECs: SPEC-TABLE-002, SPEC-TABLE-001
 See: docs/02_外部設計仕様書.md
 """
 
-from src.domain.doc_ir import Table
+from domain.doc_ir import Table
 
 
 def test_SPEC_TABLE_002_header_row_mismatch_allowed():

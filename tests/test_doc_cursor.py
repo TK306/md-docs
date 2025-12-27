@@ -1,5 +1,5 @@
-from src.domain.doc_cursor import NodeCursor
-from src.domain.doc_ir import Paragraph, Table, Heading
+from domain.doc_cursor import NodeCursor
+from domain.doc_ir import Paragraph, Table, Heading
 
 
 def test_doccursor_basic_peek_next_expect_collect():

@@ -6,7 +6,7 @@ This module provides a concrete `MarkdownParserImpl` and the legacy
 
 from __future__ import annotations
 
-from src.domain.doc_ir import (
+from domain.doc_ir import (
     Document,
     DocNode,
     Heading,
@@ -16,7 +16,7 @@ from src.domain.doc_ir import (
     Table,
     Image,
 )
-from src.interfaces.protocols import DocumentParser
+from interfaces.protocols import DocumentParser
 import re
 
 

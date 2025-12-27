@@ -9,7 +9,8 @@ from __future__ import annotations
 
 from typing import Callable, List, Optional, TypeVar, Type, cast
 
-from src.domain.doc_ir import DocNode, Paragraph, Table
+from domain.doc_ir import DocNode, Paragraph, Table
+
 
 T = TypeVar("T", bound=DocNode)
 

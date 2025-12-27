@@ -11,7 +11,7 @@ from __future__ import annotations
 from typing import Protocol
 from pathlib import Path
 
-from src.domain.doc_ir import Document
+from domain.doc_ir import Document
 
 
 class DocumentParser(Protocol):

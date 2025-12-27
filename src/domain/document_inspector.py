@@ -6,7 +6,7 @@ Markdown テキストを `Document`（`DocNode` の列）に変換するパー�
 内部表現に変換します。フロントマターは HTML コメント形式（<!-- key: value -->）で読み取ります。
 """
 
-from src.domain.doc_ir import (
+from domain.doc_ir import (
     Heading,
     BulletList,
     Table,
