@@ -57,6 +57,34 @@ class Table:
     headers: list[str]
     rows: list[list[str]]
 
+    def as_dict(self, ignore_extra_columns: bool = False) -> dict[str, str]:
+        """表を辞書に変換して返す。
+
+        - 左列をキー、右列を値として扱う。
+        - 各行は少なくとも 2 列必要。2 列より少ない行がある場合は `ValueError` を送出する。
+        - 3 列以上の行がある場合はデフォルトで `ValueError` を送出する。`ignore_extra_columns=True`
+          を渡すと余分な列を無視して変換する。
+        - 同じキーが複数行に現れた場合は `ValueError` を送出する（重複は許可しない）。
+        """
+        result: dict[str, str] = {}
+        for i, row in enumerate(self.rows):
+            if len(row) < 2:
+                raise ValueError(
+                    f"Table.as_dict: row {i} has fewer than 2 columns: {row}"
+                )
+            if len(row) > 2 and not ignore_extra_columns:
+                raise ValueError(
+                    f"Table.as_dict: row {i} has more than 2 columns: {row}"
+                )
+            key = row[0]
+            val = row[1]
+            if key in result:
+                raise ValueError(
+                    f"Table.as_dict: duplicate key found: {key!r} at row {i}"
+                )
+            result[key] = val
+        return result
+
 
 @dataclass
 class Image:

@@ -40,12 +40,9 @@ class DocParser:
                 return n
         return None
 
-    def table_as_dict(self) -> dict[str, str]:
-        """最初に見つかった表を辞書（左列をキー、右列を値）として返します。"""
-        for n in self.nodes:
-            if isinstance(n, Table):
-                return {row[0]: row[1] for row in cast(Table, n).rows if len(row) >= 2}
-        return {}
+    def tables(self) -> list[Table]:
+        """ドキュメント内のすべての `Table` ノードを `Table` 型のリストで返します。"""
+        return [cast(Table, n) for n in self.nodes if isinstance(n, Table)]
 
     def bullet_list_after(self, heading_text: str, level: int) -> list[str]:
         """指定の見出しテキストの直後にある箇条書きを返します。なければ空リスト。"""

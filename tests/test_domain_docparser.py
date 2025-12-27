@@ -1,5 +1,5 @@
-from src.domain.markdown_parser import DocParser, MarkdownParseError
-from src.domain.doc_ir import Heading, Table, BulletList, Paragraph, Document
+from src.domain.markdown_parser import DocParser
+from src.domain.doc_ir import Heading, Table, BulletList, Paragraph
 
 
 # DocParser のユニットテスト群
@@ -30,19 +30,21 @@ def test_find_and_first_heading():
 
 
 def test_table_as_dict_and_missing_table():
-    # table_as_dict が最初に見つかった表を辞書化して返すことを検証
+    # tables() がドキュメント中の Table ノードを list[Table] で返すことを検証
     tbl = Table(headers=["項目", "内容"], rows=[["種別", "機能"], ["優先度", "高"]])
     nodes = [Heading(3, "H"), tbl]
     parser = DocParser(nodes)
+    tables = parser.tables()
+    # 1 つの Table が返る
+    assert len(tables) == 1
+    assert tables[0] is tbl
+    # 行データが正しいことを確認（左列/右列）
+    rows = tables[0].rows
+    assert [rows[0][0], rows[0][1]] == ["種別", "機能"]
 
-    d = parser.table_as_dict()
-    # 表の左列がキー、右列が値として取得される
-    assert d["種別"] == "機能"
-    assert d["優先度"] == "高"
-
-    # 表がない場合は空辞書を返す
+    # 表がない場合は空リストを返す
     parser2 = DocParser([Heading(1, "h")])
-    assert parser2.table_as_dict() == {}
+    assert parser2.tables() == []
 
 
 def test_bullet_list_after():

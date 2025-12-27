@@ -73,7 +73,10 @@ class EvalItem(DocConvertible):
         id = parts[0]
         title = parts[1] if len(parts) > 1 else ""
 
-        table = parser.table_as_dict()
+        tables = parser.tables()
+        table: dict[str, str] = {}
+        if tables:
+            table = tables[0].as_dict()
 
         conditions = parser.bullet_list_after("条件", level=4)
         expected = parser.bullet_list_after("期待結果", level=4)
