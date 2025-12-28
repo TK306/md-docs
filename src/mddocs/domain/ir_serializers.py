@@ -5,7 +5,7 @@ to string representations. These functions are side-effect free and
 do not depend on external formatting libraries.
 """
 
-from domain.doc_ir import (
+from mddocs.domain.doc_ir import (
     Heading,
     Paragraph,
     BulletList,

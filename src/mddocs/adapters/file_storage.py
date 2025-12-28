@@ -6,7 +6,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from interfaces.protocols import Storage
+from mddocs.interfaces.protocols import Storage
 
 
 class FileStorage(Storage):

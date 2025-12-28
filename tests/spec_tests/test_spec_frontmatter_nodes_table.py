@@ -3,8 +3,8 @@ Covered SPECs: SPEC-FM-001, SPEC-NODES-001, SPEC-TABLE-001
 See: docs/02_外部設計仕様書.md
 """
 
-from adapters.markdown_parser import parse_markdown
-from domain.doc_ir import Table
+from mddocs.adapters.markdown_parser import parse_markdown
+from mddocs.domain.doc_ir import Table
 
 
 def test_SPEC_FM_001_front_matter_parsing():

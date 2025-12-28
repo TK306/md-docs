@@ -9,8 +9,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Type
 
-from interfaces.protocols import DocumentParser, DocumentRenderer, Storage
-from domain.doc_convertible import DocConvertible
+from mddocs.interfaces.protocols import DocumentParser, DocumentRenderer, Storage
+from mddocs.domain.doc_convertible import DocConvertible
 
 
 class ConvertFileUsecase:
@@ -44,7 +44,7 @@ class ConvertFileUsecase:
         """モデルを Markdown 文字列に変換して指定パスへ保存する。"""
         nodes = model.to_nodes()
         # ラッパー Document を生成してレンダラへ渡す。フロントマターはモデル側で必要に応じ提供される想定
-        from domain.doc_ir import Document
+        from mddocs.domain.doc_ir import Document
 
         # Allow models to optionally provide front_matter. Preferred hooks:
         # - model.to_front_matter() -> dict

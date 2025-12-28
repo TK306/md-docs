@@ -254,28 +254,28 @@ wheels = [
 [[package]]
 name = "md-docs"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "mdformat" },
+]
+
+[package.optional-dependencies]
+dev = [
+    { name = "import-linter" },
     { name = "mypy" },
     { name = "pre-commit" },
     { name = "pytest" },
     { name = "ruff" },
 ]
 
-[package.optional-dependencies]
-dev = [
-    { name = "import-linter" },
-]
-
 [package.metadata]
 requires-dist = [
     { name = "import-linter", marker = "extra == 'dev'", specifier = ">=2.9" },
     { name = "mdformat", specifier = ">=0.7.17" },
-    { name = "mypy", specifier = ">=1.19.1" },
-    { name = "pre-commit", specifier = ">=4.5.1" },
-    { name = "pytest", specifier = ">=9.0.2" },
-    { name = "ruff", specifier = ">=0.14.10" },
+    { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.19.1" },
+    { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=4.5.1" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=9.0.2" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.14.10" },
 ]
 provides-extras = ["dev"]
 

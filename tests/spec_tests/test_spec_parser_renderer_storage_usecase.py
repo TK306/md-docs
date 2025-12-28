@@ -5,12 +5,15 @@ See: docs/02_外部設計仕様書.md
 
 from pathlib import Path
 
-from adapters.markdown_adapter import MarkdownParserAdapter, MarkdownRendererAdapter
-from adapters.markdown_renderer import document_to_markdown
-from adapters.file_storage import FileStorage
-from usecase.convert_usecase import ConvertFileUsecase
-from domain.doc_ir import Paragraph
-from domain.doc_convertible import DocConvertible
+from mddocs.adapters.markdown_adapter import (
+    MarkdownParserAdapter,
+    MarkdownRendererAdapter,
+)
+from mddocs.adapters.markdown_renderer import document_to_markdown
+from mddocs.adapters.file_storage import FileStorage
+from mddocs.usecase.convert_usecase import ConvertFileUsecase
+from mddocs.domain.doc_ir import Paragraph
+from mddocs.domain.doc_convertible import DocConvertible
 
 
 class DummyModel(DocConvertible):

@@ -4,13 +4,13 @@ See: docs/02_外部設計仕様書.md
 """
 
 from pathlib import Path
-from usecase.convert_usecase import ConvertFileUsecase
-from adapters.markdown_parser import MarkdownParserImpl
-from adapters.markdown_adapter import MarkdownRendererAdapter
+from mddocs.usecase.convert_usecase import ConvertFileUsecase
+from mddocs.adapters.markdown_parser import MarkdownParserImpl
+from mddocs.adapters.markdown_adapter import MarkdownRendererAdapter
 
-from interfaces.protocols import Storage
-from domain.doc_convertible import DocConvertible
-from domain.doc_cursor import NodeCursor
+from mddocs.interfaces.protocols import Storage
+from mddocs.domain.doc_convertible import DocConvertible
+from mddocs.domain.doc_cursor import NodeCursor
 
 
 class DummyStorage(Storage):

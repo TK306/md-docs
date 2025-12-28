@@ -7,9 +7,9 @@
 
 from __future__ import annotations
 
-from interfaces.protocols import DocumentParser, DocumentRenderer
-from adapters.markdown_renderer import document_to_markdown
-from adapters.markdown_parser import MarkdownParserImpl
+from mddocs.interfaces.protocols import DocumentParser, DocumentRenderer
+from mddocs.adapters.markdown_renderer import document_to_markdown
+from mddocs.adapters.markdown_parser import MarkdownParserImpl
 
 
 class MarkdownParserAdapter:

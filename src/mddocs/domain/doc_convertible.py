@@ -10,7 +10,7 @@
 from abc import ABC, abstractmethod
 from typing import TypeVar, Type, Optional, Callable, cast
 
-from domain.doc_ir import DocNode
+from mddocs.domain.doc_ir import DocNode
 
 # 基底クラスをバインドしておくことで Type[T] が from_nodes を持つことを静的に示す
 T = TypeVar("T", bound="DocConvertible")
@@ -64,7 +64,7 @@ class DocConvertible(ABC):
         """
         # 後方互換: 具象が from_cursor を実装していればそれを用いる
         if hasattr(cls, "from_cursor"):
-            from domain.doc_cursor import NodeCursor
+            from mddocs.domain.doc_cursor import NodeCursor
 
             cur = NodeCursor(nodes, front_matter or {})
             # 型情報が静的にはないため getattr してキャストしてから呼ぶ

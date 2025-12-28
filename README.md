@@ -15,22 +15,23 @@ Markdownと任意構造体を相互変換する
 ├── pyproject.toml
 ├── README.md
 ├── src: ソースコード
-│   ├── __init__.py
-│   ├── adapters
-│   │   ├── file_storage.py
-│   │   ├── markdown_adapter.py
-│   │   ├── markdown_parser.py
-│   │   └── markdown_renderer.py
-│   ├── domain
-│   │   ├── __init__.py
-│   │   ├── doc_convertible.py
-│   │   ├── doc_cursor.py
-│   │   ├── doc_ir.py
-│   │   ├── document_inspector.py
-│   │   └── ir_serializers.py
-│   ├── interfaces
-│   │   └── protocols.py
-│   └── usecase
+│   └── mddocs
+│       ├── __init__.py
+│       ├── adapters
+│       │   ├── file_storage.py
+│       │   ├── markdown_adapter.py
+│       │   ├── markdown_parser.py
+│       │   └── markdown_renderer.py
+│       ├── domain
+│       │   ├── __init__.py
+│       │   ├── doc_convertible.py
+│       │   ├── doc_cursor.py
+│       │   ├── doc_ir.py
+│       │   ├── document_inspector.py
+│       │   └── ir_serializers.py
+│       ├── interfaces
+│       │   └── protocols.py
+│       └── usecase
 │       ├── __init__.py
 │       └── convert_usecase.py
 ├── tests: テストコード
@@ -49,3 +50,22 @@ Markdownと任意構造体を相互変換する
 
 * uv
 * pre-commit
+
+## Installation
+
+- Install from GitHub (branch or tag):
+
+```
+pip install "git+https://github.com/TK306/md-docs.git@refactor/package"
+```
+
+- Install from a built wheel (locally):
+
+```
+python -m pip install --upgrade build wheel
+python -m build
+python -m pip install dist/*.whl
+```
+
+Note: development tools (mypy, ruff, pytest, pre-commit, import-linter) are listed
+under optional dev dependencies and are not installed for normal runtime usage.

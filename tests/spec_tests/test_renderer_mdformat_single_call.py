@@ -3,8 +3,8 @@ Covered SPECs: SPEC-RENDER-002 (related: SPEC-RENDER-001)
 See: docs/02_外部設計仕様書.md
 """
 
-from adapters.markdown_adapter import MarkdownRendererAdapter
-from domain.doc_ir import Document, Paragraph
+from mddocs.adapters.markdown_adapter import MarkdownRendererAdapter
+from mddocs.domain.doc_ir import Document, Paragraph
 
 
 class DummyDoc:
@@ -19,7 +19,7 @@ def test_SPEC_RENDER_002_mdformat_called_once(monkeypatch):
         return s
 
     # monkeypatch the mdformat used in adapter's implementation module
-    import adapters.markdown_renderer as mr
+    import mddocs.adapters.markdown_renderer as mr
 
     monkeypatch.setattr(
         mr, "mdformat", type("M", (), {"text": staticmethod(fake_text)})

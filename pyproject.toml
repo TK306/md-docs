@@ -5,16 +5,16 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "mypy>=1.19.1",
-    "ruff>=0.14.10",
     "mdformat>=0.7.17",
-    "pytest>=9.0.2",
-    "pre-commit>=4.5.1",
 ]
 
 [project.optional-dependencies]
 dev = [
     "import-linter>=2.9",
+    "mypy>=1.19.1",
+    "ruff>=0.14.10",
+    "pytest>=9.0.2",
+    "pre-commit>=4.5.1",
 ]
 
 # -------------------------------------------------
@@ -22,41 +22,43 @@ dev = [
 # -------------------------------------------------
 
 [tool.importlinter]
-# Python import roots (src is on PYTHONPATH, but not an import name)
-root_packages = ["domain", "adapters", "usecase", "interfaces"]
+# Python import root: package installed by the build is `mddocs`.
+# Use the installed package name as the root so import-linter runs in
+# the same import layout as consumers (and pre-commit builds the wheel).
+root_packages = ["mddocs"]
 
 # Domain must be pure
 [[tool.importlinter.contracts]]
 name = "domain_no_adapters"
 type = "forbidden"
-source_modules = ["domain"]
-forbidden_modules = ["adapters"]
+source_modules = ["mddocs.domain"]
+forbidden_modules = ["mddocs.adapters"]
 
 [[tool.importlinter.contracts]]
 name = "domain_no_usecase"
 type = "forbidden"
-source_modules = ["domain"]
-forbidden_modules = ["usecase"]
+source_modules = ["mddocs.domain"]
+forbidden_modules = ["mddocs.usecase"]
 
 [[tool.importlinter.contracts]]
 name = "domain_no_interfaces"
 type = "forbidden"
-source_modules = ["domain"]
-forbidden_modules = ["interfaces"]
+source_modules = ["mddocs.domain"]
+forbidden_modules = ["mddocs.interfaces"]
 
 # Usecase depends only on domain + interfaces
 [[tool.importlinter.contracts]]
 name = "usecase_no_adapters"
 type = "forbidden"
-source_modules = ["usecase"]
-forbidden_modules = ["adapters"]
+source_modules = ["mddocs.usecase"]
+forbidden_modules = ["mddocs.adapters"]
 
 # Interfaces must not depend on adapters
 [[tool.importlinter.contracts]]
 name = "interfaces_no_adapters"
 type = "forbidden"
-source_modules = ["interfaces"]
-forbidden_modules = ["adapters"]
+source_modules = ["mddocs.interfaces"]
+forbidden_modules = ["mddocs.adapters"]
 
 # -------------------------------------------------
 # pytest configuration
@@ -66,7 +68,7 @@ forbidden_modules = ["adapters"]
 # src is added to PYTHONPATH so that:
 #   domain, adapters, usecase, interfaces
 # are importable as top-level packages
-pythonpath = ["src"]
+pythonpath = ["src", "src/mddocs"]
 
 # -------------------------------------------------
 # mypy configuration (optional but explicit)
@@ -77,3 +79,12 @@ python_version = "3.11"
 mypy_path = "src"
 explicit_package_bases = true
 namespace_packages = true
+
+# Build / packaging configuration so `mddocs` under `src/` is included
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["mddocs*"]
