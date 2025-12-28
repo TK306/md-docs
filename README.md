@@ -30,7 +30,7 @@ Markdownと任意構造体を相互変換する
 │       │   ├── document_inspector.py
 │       │   └── ir_serializers.py
 │       ├── interfaces
-│           ├── __init__.py
+│       │   ├── __init__.py
 │       │   └── protocols.py
 │       └── usecase
 │           ├── __init__.py
@@ -57,7 +57,7 @@ Markdownと任意構造体を相互変換する
 - Install from GitHub (branch or tag):
 
 ```
-pip install "git+https://github.com/TK306/md-docs.git@refactor/package"
+pip install "git+https://github.com/TK306/md-docs.git"
 ```
 
 - Install from a built wheel (locally):
