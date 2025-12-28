@@ -29,7 +29,7 @@ class DummyModel(DocConvertible):
         return cls(p.text if p else "")
 
 
-def test_SPEC_PARSER_001_and_SPEC_RENDER_001_and_SPEC_STORAGE_001_roundtrip(
+def test_roundtrip(
     tmp_path: Path,
 ):
     storage = FileStorage()

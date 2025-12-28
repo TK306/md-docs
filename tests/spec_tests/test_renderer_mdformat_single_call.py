@@ -11,7 +11,7 @@ class DummyDoc:
     pass
 
 
-def test_SPEC_RENDER_002_mdformat_called_once(monkeypatch):
+def test_mdformat_called_once(monkeypatch):
     called = {"count": 0}
 
     def fake_text(s):

@@ -39,7 +39,7 @@ class DummyModel(DocConvertible):
         return []
 
 
-def test_SPEC_FM_002_front_matter_propagation():
+def test_front_matter_propagation():
     md = """<!--
 title: test-title
 -->

@@ -6,7 +6,7 @@ See: docs/02_外部設計仕様書.md
 from mddocs.domain.doc_ir import Table
 
 
-def test_SPEC_TABLE_002_header_row_mismatch_allowed():
+def test_header_row_mismatch_allowed():
     # ヘッダが3列、データ行が2列でも Table インスタンスは作れる（実装上の挙動）
     t = Table(headers=["a", "b", "c"], rows=[["k1", "v1"], ["k2", "v2"]])
     # as_dict は行ごとの列数チェックのみ行うためエラーにならない
@@ -14,7 +14,7 @@ def test_SPEC_TABLE_002_header_row_mismatch_allowed():
     assert d["k1"] == "v1"
 
 
-def test_SPEC_TABLE_001_row_column_count_enforcement():
+def test_row_column_count_enforcement():
     # 少なすぎる行はエラー
     t = Table(headers=["k", "v"], rows=[["only_one"]])
     try:

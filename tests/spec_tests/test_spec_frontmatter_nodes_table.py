@@ -7,14 +7,14 @@ from mddocs.adapters.markdown_parser import parse_markdown
 from mddocs.domain.doc_ir import Table
 
 
-def test_SPEC_FM_001_front_matter_parsing():
+def test_front_matter_parsing():
     md = """<!--\ntitle: テスト\n-->\n\n# h\n"""
     doc = parse_markdown(md)
     assert isinstance(doc.front_matter, dict)
     assert doc.front_matter.get("title") == "テスト"
 
 
-def test_SPEC_NODES_001_node_types():
+def test_node_types():
     md = """
 # Heading
 
@@ -43,7 +43,7 @@ Paragraph line.
     assert "Image" in types
 
 
-def test_SPEC_TABLE_001_table_as_dict_rules():
+def test_table_as_dict_rules():
     # valid 2-column table
     t = Table(headers=["k", "v"], rows=[["a", "1"], ["b", "2"]])
     d = t.as_dict()
