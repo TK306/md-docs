@@ -30,10 +30,11 @@ Markdownと任意構造体を相互変換する
 │       │   ├── document_inspector.py
 │       │   └── ir_serializers.py
 │       ├── interfaces
+│           ├── __init__.py
 │       │   └── protocols.py
 │       └── usecase
-│       ├── __init__.py
-│       └── convert_usecase.py
+│           ├── __init__.py
+│           └── convert_usecase.py
 ├── tests: テストコード
 │   ├── conftest.py
 │   ├── spec_tests: 外部設計仕様書と対応するテストコード
